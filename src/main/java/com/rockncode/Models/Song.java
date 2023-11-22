@@ -5,8 +5,22 @@ import java.time.LocalDate;
 public class Song {
     private String name;
     private String genre;
-    private LocalDate realease;
+    private LocalDate release;
     private Album album;
+
+    public Song(String name, String genre, LocalDate date) {
+        this.name = name;
+        this.genre = genre;
+        this.release = date;
+        this.album = null;
+    }
+
+    public Song(String name, String genre, LocalDate date, Album album) {
+        this.name = name;
+        this.genre = genre;
+        this.release = date;
+        this.album = album;
+    }
 
     /**
      * Getters and Setters
@@ -24,8 +38,8 @@ public class Song {
         return name;
     }
 
-    public LocalDate getRealease() {
-        return realease;
+    public LocalDate getrelease() {
+        return release;
     }
 
     public void setAlbum(Album album) {
@@ -40,11 +54,28 @@ public class Song {
         this.name = name;
     }
 
-    public void setRealease(LocalDate realease) {
-        this.realease = realease;
+    public void setrelease(LocalDate release) {
+        this.release = release;
     }
 
     /**
      * Custom Methods
      */
+
+    public String show() {
+        return String.format("%s - %s - %s - %s",
+                name, genre, release, album != null ? album.getName() : "");
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nombre de la canción: ").append(name).append("\n");
+        sb.append("Género: ").append(genre).append("\n");
+        sb.append("Fecha de lanzamiento: ").append(release).append("\n");
+        sb.append("Álbum: ").append((album != null) ? album.getName() : "Sin álbum asociado").append("\n");
+        return sb.toString();
+
+    }
 }

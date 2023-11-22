@@ -8,7 +8,7 @@ public class Order {
     private double total;
     private String address;
     private String status;
-    private Client client;
+    private Fanatic fanatic;
     private List<Item> items;
 
     /*
@@ -19,8 +19,8 @@ public class Order {
         return address;
     }
 
-    public Client getClient() {
-        return client;
+    public Fanatic getClient() {
+        return fanatic;
     }
 
     public int getId() {
@@ -43,8 +43,8 @@ public class Order {
         this.address = address;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setClient(Fanatic fanatic) {
+        this.fanatic = fanatic;
     }
 
     public void setId(int id) {

@@ -19,6 +19,9 @@ public class Album {
 		this.reviews = new ArrayList<String>();
 		this.sales = 0;
 		this.topHits = new ArrayList<String>();
+		for (Song s : this.songs) {
+			s.setAlbum(this);
+		}
 	}
 
 	/*
@@ -108,5 +111,25 @@ public class Album {
 
 	public boolean deleteTopHit(String hit) {
 		return this.topHits.remove(hit);
+	}
+
+	public String show() {
+		return String.format("%s - %s - %d",
+				name, release, songs.size());
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Nombre del álbum: ").append(name).append("\n");
+		sb.append("Fecha de lanzamiento: ").append(release).append("\n");
+		sb.append("Canciones:\n");
+		for (int i = 0; i < songs.size(); i++) {
+			sb.append("  ").append(i + 1).append(". ").append(songs.get(i).getName()).append("\n");
+		}
+		sb.append("Ventas: ").append(sales).append("\n");
+		sb.append("Reseñas: ").append(reviews.isEmpty() ? "Sin reseñas" : reviews).append("\n");
+		sb.append("Éxitos: ").append(topHits.isEmpty() ? "Sin éxitos" : topHits).append("\n");
+		return sb.toString();
 	}
 }

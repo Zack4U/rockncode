@@ -41,4 +41,9 @@ public class Member {
     /**
      * Custom Methods
      */
+
+    public String show() {
+        return String.format("%s - %s - %s",
+                name, instrument, skill);
+    }
 }
