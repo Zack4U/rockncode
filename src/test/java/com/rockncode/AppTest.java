@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+
 public class AppTest {
     public static void main(String[] args) {
         // Crear una banda con un concierto programado
@@ -47,8 +48,11 @@ public class AppTest {
             // Supongamos que "fechaAlbum" es la fecha del álbum
             LocalDate fechaAlbum = LocalDate.now();
 
+            // Supongamos que "price" es el precio del álbum
+            double precio = 2000.0;
+
             // Programar un álbum y obtener la información del álbum creado
-            Album album = band.scheduleAlbum(nombreAlbum, fechaAlbum);
+            Album album = band.scheduleAlbum(nombreAlbum, fechaAlbum, precio);
 
             // Mostrar por consola la información del álbum
             System.out.println("Álbum programado: " + album.toString());
