@@ -1,10 +1,11 @@
 package com.rockncode;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.rockncode.Exceptions.ConcertNotAvailableException;
+import com.rockncode.Exceptions.InsufficientFundsException;
 import com.rockncode.Models.Album;
 import com.rockncode.Models.Band;
 import com.rockncode.Models.Concert;
@@ -12,12 +13,10 @@ import com.rockncode.Models.Fanatic;
 import com.rockncode.Models.Member;
 import com.rockncode.Models.Song;
 
-/**
- * Hello world!
- *
- */
+import java.time.LocalDate;
+
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ConcertNotAvailableException, InsufficientFundsException {
         Scanner sc = new Scanner(System.in);
 
         List<Band> bands = new ArrayList<Band>();
@@ -33,7 +32,7 @@ public class App {
             for (int i = 0; i < bands.size(); i++) {
                 System.out.println((i + 2) + ". " + bands.get(i).getName());
             }
-            System.out.println("\nELIGE LA BANDA PARA ADMINISTRAR: ");
+            System.out.println("\nELIGE PARA ADMINISTRAR: ");
             int index = sc.nextInt();
             if (index == 0) {
                 System.out.println("..............CONEXION FINALIZADA...............");
@@ -43,7 +42,7 @@ public class App {
             } else if (index > 1 && index <= bands.size() + 1) {
                 do {
                     Band band = bands.get(index - 2);
-                    List options = new ArrayList<>();
+                    List<String> options = new ArrayList<>();
                     options.add("Control de Banda");
                     options.add("Control de Conciertos");
                     options.add("Control de Albunes");
@@ -57,24 +56,22 @@ public class App {
                         break;
                     } else if (select > 0 && select <= options.size()) {
                         switch (select) {
-
                             case 1:
                                 bandOptions(band);
                                 break;
 
                             case 2:
-                                concertOptions(band1);
+                                concertOptions(band);
                                 break;
 
                             case 3:
-                                albumOptions(band1);
+                                albumOptions(band);
                                 break;
 
                             default:
                                 System.out.println("ERROR: Opcion Invalida");
                                 break;
                         }
-
                     }
                 } while (true);
             } else {
@@ -82,10 +79,9 @@ public class App {
             }
 
         } while (true);
-
     }
 
-    private static int select(List options) {
+    private static int select(List<String> options) {
         Scanner sc = new Scanner(System.in);
         System.out.println("0. [ATRAS]");
         for (int i = 0; i < options.size(); i++) {
@@ -96,7 +92,7 @@ public class App {
 
     private static void bandOptions(Band band) {
         do {
-            List options = new ArrayList<>();
+            List<String> options = new ArrayList<>();
             Scanner sc = new Scanner(System.in);
             options.add("Agregar Miembro");
             options.add("Eliminar Miembro");
@@ -192,7 +188,7 @@ public class App {
 
     private static void concertOptions(Band band) {
         do {
-            List options = new ArrayList<>();
+            List<String> options = new ArrayList<>();
             Scanner sc = new Scanner(System.in);
             options.add("Programar Concierto");
             options.add("Ver Conciertos Programados");
@@ -237,7 +233,7 @@ public class App {
 
     private static void albumOptions(Band band) {
         do {
-            List options = new ArrayList<>();
+            List<String> options = new ArrayList<>();
             Scanner sc = new Scanner(System.in);
             options.add("Lanzar Album");
             options.add("Ver Albunes");
@@ -294,7 +290,7 @@ public class App {
         } while (true);
     }
 
-    public static void fanaticOptions(List<Band> bands) {
+    private static void fanaticOptions(List<Band> bands) {
         System.out.println("\n.............CONEXION COMO FAN..............\n");
         Scanner sc = new Scanner(System.in);
 
@@ -303,10 +299,10 @@ public class App {
         if (name.length() > 0) {
             System.out.println("Ingrese su correo");
             String email = sc.nextLine();
-            if (name.length() > 0) {
+            if (email.length() > 0) {
                 System.out.println("Ingrese su ubicacion");
                 String ubication = sc.nextLine();
-                if (name.length() > 0) {
+                if (ubication.length() > 0) {
                     System.out.println("Ingrese sus redes sociales (Opcional)");
                     String socialNetworks = sc.nextLine();
 
@@ -324,7 +320,7 @@ public class App {
                         } else if (select > 0 && select <= bands.size()) {
                             Band band = bands.get(select - 1);
                             do {
-                                List options = new ArrayList<>();
+                                List<String> options = new ArrayList<>();
                                 options.add("Comprar boleteria");
                                 options.add("Comprar album");
                                 options.add("Escribir reseña");
@@ -348,9 +344,10 @@ public class App {
                                                     System.out.println("STATUS: Compra fallida");
                                                     System.out.println("..........................................\n");
                                                 }
-                                                ;
+                                            } catch (ConcertNotAvailableException | InsufficientFundsException e) {
+                                                System.out.println(e.getMessage());
                                             } catch (Exception e) {
-                                                System.out.println(e);
+                                                throw new RuntimeException(e);
                                             }
                                             break;
 
@@ -372,6 +369,5 @@ public class App {
         } else {
             System.out.println("ERROR: Ingrese su nombre");
         }
-
     }
 }

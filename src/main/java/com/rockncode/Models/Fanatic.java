@@ -1,29 +1,28 @@
 package com.rockncode.Models;
 
+import com.rockncode.Exceptions.ConcertNotAvailableException;
+import com.rockncode.Exceptions.InsufficientFundsException;
+
 import java.util.List;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class Fanatic {
     private String name;
     private String email;
     private String ubication;
     private String socialNetworks;
-    private List<Concert> concerts;
     private double balance;
+    private List<Concert> concerts;
 
     public Fanatic(String name, String email, String ubication, String socialNetworks) {
         this.name = name;
         this.email = email;
         this.ubication = ubication;
         this.socialNetworks = socialNetworks;
-        this.concerts = new ArrayList<>();
         this.balance = 0.0;
     }
 
-    /*
-     * Getters and Setters
-     */
+    // Getters and Setters
 
     public List<Concert> getConcerts() {
         return concerts;
@@ -73,55 +72,64 @@ public class Fanatic {
         this.balance = balance;
     }
 
-    /*
-     * Custom Methods
-     */
+    // Custom Methods
 
     public void addFunds(double quantity) {
         this.balance = this.balance + quantity;
     }
 
-    public boolean buyTicket(Band band) throws Exception {
+    public boolean buyTicket(Band band) throws ConcertNotAvailableException, InsufficientFundsException {
         List<Concert> concerts = band.getConcerts();
         Scanner sc = new Scanner(System.in);
+
+        // Verificar si hay conciertos disponibles
+        if (concerts.isEmpty()) {
+            throw new ConcertNotAvailableException("No hay conciertos disponibles para la compra de boletos.");
+        }
+
         do {
             System.out.println("............ SELECT CONCERT .............");
-
             System.out.println("0. [ATRAS]");
+
             for (int i = 0; i < concerts.size(); i++) {
                 System.out.println((i + 1) + ". " + concerts.get(i).show());
             }
+
             int option = sc.nextInt();
+
             if (option == 0) {
                 return false;
             } else if (option > 0 && option <= concerts.size()) {
                 Concert concert = concerts.get(option - 1);
+
                 do {
                     System.out.println("¿Cuantos tickets desea?");
                     int quantity = sc.nextInt();
 
-                    if (quantity > 1) {
-                        return concert.addTicketSold(this, quantity);
-                    } else if (quantity == 1) {
-                        return concert.addTicketSold(this);
+                    if (quantity > 0) {
+                        concert.addTicketSold(this, quantity);
+                        return true;
                     } else {
-                        System.out.println("Debe elegir mas de 1 ticket");
+                        System.out.println("Debe elegir al menos 1 ticket.");
                     }
                 } while (true);
             } else {
                 System.out.println("Concierto invalido");
             }
-
         } while (true);
     }
+
+//-----------------------------------------------------------------------------------------------------
 
     public boolean addFunds() {
         Scanner sc = new Scanner(System.in);
         double amount = sc.nextDouble();
+
         if (amount > 0) {
             this.setBalance(this.getBalance() + amount);
             return true;
         }
+
         return false;
     }
 
@@ -134,6 +142,7 @@ public class Fanatic {
         sb.append("Redes sociales: ").append(socialNetworks).append("\n");
 
         sb.append("Conciertos asistidos:\n");
+
         if (concerts.isEmpty()) {
             sb.append("  - No ha asistido a ningún concierto\n");
         } else {

@@ -1,5 +1,8 @@
 package com.rockncode.Models;
 
+import com.rockncode.Exceptions.ConcertNotAvailableException;
+import com.rockncode.Exceptions.InsufficientFundsException;
+import com.rockncode.Exceptions.AlbumNotAvailableException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,35 +129,23 @@ public class Concert {
 		return this.songs.remove(song);
 	}
 
-	public boolean addTicketSold(Fanatic fanatic) throws Exception {
-		if (this.getTicketsAvailable() > 0) {
-			if (fanatic.getBalance() < this.ticketPrice) {
-				throw new Exception("Fondos insuficientes");
-			} else {
-				this.setTicketsSold(this.getTicketsSold() + 1);
-				this.setTicketsAvailable(this.getTicketsAvailable() - 1);
-				this.fanatics.add(fanatic);
-				return true;
-			}
-		} else {
-			throw new Exception("Ticket no disponibles");
-		}
-	}
-
-	public boolean addTicketSold(Fanatic fanatic, int quantity) throws Exception {
+	public boolean addTicketSold(Fanatic fanatic, int quantity) throws InsufficientFundsException, ConcertNotAvailableException {
 		if (this.getTicketsAvailable() >= quantity) {
-			if (fanatic.getBalance() < this.ticketPrice) {
-				throw new Exception("Fondos insuficientes");
+			if (fanatic.getBalance() < this.ticketPrice * quantity) {
+				throw new InsufficientFundsException("Fondos insuficientes para comprar los boletos.");
 			} else {
 				this.setTicketsSold(this.getTicketsSold() + quantity);
 				this.setTicketsAvailable(this.getTicketsAvailable() - quantity);
 				this.fanatics.add(fanatic);
+				System.out.println("Tickets vendidos: " + quantity);
 				return true;
 			}
 		} else {
-			throw new Exception("Tickets no disponibles");
+			throw new ConcertNotAvailableException("Tickets no disponibles.");
 		}
 	}
+
+
 
 	public String show() {
 		return String.format("%s - %s - Available Tickets: %s - Estado: %s",
