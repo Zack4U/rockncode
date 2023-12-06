@@ -129,7 +129,8 @@ public class Concert {
 		return this.songs.remove(song);
 	}
 
-	public boolean addTicketSold(Fanatic fanatic, int quantity) throws InsufficientFundsException, ConcertNotAvailableException {
+	public boolean addTicketSold(Fanatic fanatic, int quantity)
+			throws InsufficientFundsException, ConcertNotAvailableException {
 		if (this.getTicketsAvailable() >= quantity) {
 			if (fanatic.getBalance() < this.ticketPrice * quantity) {
 				throw new InsufficientFundsException("Fondos insuficientes para comprar los boletos.");
@@ -144,8 +145,6 @@ public class Concert {
 			throw new ConcertNotAvailableException("Tickets no disponibles.");
 		}
 	}
-
-
 
 	public String show() {
 		return String.format("%s - %s - Available Tickets: %s - Estado: %s",

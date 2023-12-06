@@ -3,9 +3,17 @@ package com.rockncode.Models;
 public class Item {
     private String name;
     private String category;
-    private String descripcion;
+    private String description;
     private double price;
     private int disponibility;
+
+    public Item(String name, String category, String despcription, double price, int disponibility) {
+        this.name = name;
+        this.category = category;
+        this.description = despcription;
+        this.price = price;
+        this.disponibility = disponibility;
+    }
 
     /*
      * Getters and Setters
@@ -15,8 +23,8 @@ public class Item {
         return category;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getdescription() {
+        return description;
     }
 
     public int getDisponibility() {
@@ -35,8 +43,8 @@ public class Item {
         this.category = category;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setDisponibility(int disponibility) {
@@ -51,4 +59,29 @@ public class Item {
         this.price = price;
     }
 
+    public void addStock(int stock) {
+        this.setDisponibility(this.getDisponibility() + stock);
+    }
+
+    public void itemSold(int sale) {
+        this.setDisponibility(this.getDisponibility() - sale);
+    }
+
+    public String show() {
+        return String.format("%s - %s - Price: %.2f - %s - Disponibility: %d",
+                name, category, price, description, disponibility);
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nombre: ").append(name).append("\n");
+        sb.append("Categoria: ").append(category).append("\n");
+        sb.append("description: ").append(description).append("\n");
+        sb.append("Precio: $").append(price).append("\n");
+        sb.append("Disponibles: ").append((disponibility != 0) ? getDisponibility() : "Sin stock").append("\n");
+        return sb.toString();
+
+    }
 }

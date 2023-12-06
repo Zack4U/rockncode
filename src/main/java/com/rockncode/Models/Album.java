@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rockncode.Exceptions.InsufficientFundsException;
+
 public class Album {
 	private String name;
 	private LocalDate release;
@@ -11,6 +13,7 @@ public class Album {
 	private int sales;
 	private List<String> topHits;
 	private List<Song> songs;
+	private double price;
 
 	public Album(String name, LocalDate release, List<Song> songs) {
 		this.name = name;
@@ -22,6 +25,7 @@ public class Album {
 		for (Song s : this.songs) {
 			s.setAlbum(this);
 		}
+		this.price = 0.0;
 	}
 
 	/*
@@ -52,6 +56,14 @@ public class Album {
 		return topHits;
 	}
 
+	public double getPrice() {
+		return price;
+	}
+
+	public List<String> getReviews() {
+		return reviews;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -74,6 +86,10 @@ public class Album {
 
 	public void setTopHits(List<String> topHits) {
 		this.topHits = topHits;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	/**
@@ -113,6 +129,17 @@ public class Album {
 		return this.topHits.remove(hit);
 	}
 
+	public boolean buyAlbum(Fanatic fanatic, int quantity) throws InsufficientFundsException {
+
+		if (fanatic.getBalance() < this.price * quantity) {
+			throw new InsufficientFundsException("Fondos insuficientes para comprar el/los albunes.");
+		} else {
+			this.setSales(this.getSales() + quantity);
+			System.out.println("Album vendido");
+			return true;
+		}
+	}
+
 	public String show() {
 		return String.format("%s - %s - %d",
 				name, release, songs.size());
@@ -128,6 +155,7 @@ public class Album {
 			sb.append("  ").append(i + 1).append(". ").append(songs.get(i).getName()).append("\n");
 		}
 		sb.append("Ventas: ").append(sales).append("\n");
+		sb.append("Precio: ").append(price).append("\n");
 		sb.append("Reseñas: ").append(reviews.isEmpty() ? "Sin reseñas" : reviews).append("\n");
 		sb.append("Éxitos: ").append(topHits.isEmpty() ? "Sin éxitos" : topHits).append("\n");
 		return sb.toString();
