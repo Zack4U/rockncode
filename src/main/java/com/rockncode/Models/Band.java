@@ -1,6 +1,7 @@
 package com.rockncode.Models;
 
 import com.rockncode.Exceptions.AlbumNotAvailableException;
+import com.rockncode.Exceptions.DateNotAvailableException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -147,9 +148,9 @@ public class Band {
         return this.orders.add(order);
     }
 
-    public Concert scheduleConcert(LocalDate date) throws Exception {
+    public Concert scheduleConcert(LocalDate date) throws DateNotAvailableException {
         if (!checkDate(date)) {
-            throw new Exception("Fecha no valida");
+            throw new DateNotAvailableException("Fecha no valida");
         }
         List<Song> songs = this.scheduleSongs();
 
