@@ -14,6 +14,8 @@ public class Band {
     private List<Member> members;
     private List<Album> albums;
     private List<Concert> concerts;
+    private List<Item> merchandising;
+    private List<Order> orders;
 
     public Band(String name) {
         this.name = name;
@@ -22,6 +24,8 @@ public class Band {
         this.members = new ArrayList<>();
         this.albums = new ArrayList<>();
         this.concerts = new ArrayList<>();
+        this.merchandising = new ArrayList<>();
+        this.orders = new ArrayList<>();
     }
 
     /**
@@ -51,6 +55,14 @@ public class Band {
         return concerts;
     }
 
+    public List<Item> getMerchandising() {
+        return merchandising;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     public void setGenre(String genre) {
         this.genre = genre;
     }
@@ -73,6 +85,14 @@ public class Band {
 
     public void setConcerts(List<Concert> concerts) {
         this.concerts = concerts;
+    }
+
+    public void setMerchandising(List<Item> merchandising) {
+        this.merchandising = merchandising;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     /**
@@ -119,6 +139,14 @@ public class Band {
         return this.members.add(member);
     }
 
+    public boolean addMerchandising(Item item) {
+        return this.merchandising.add(item);
+    }
+
+    public boolean addOrder(Order order) {
+        return this.orders.add(order);
+    }
+
     public Concert scheduleConcert(LocalDate date) throws Exception {
         if (!checkDate(date)) {
             throw new Exception("Fecha no valida");
@@ -146,7 +174,6 @@ public class Band {
         this.concerts.add(concert);
         return concert;
     }
-
 
     private boolean checkDate(LocalDate date) {
         for (Concert concert : this.concerts) {
@@ -217,14 +244,11 @@ public class Band {
         return songs;
     }
 
-
-
-
-
-    public Album scheduleAlbum(String name, LocalDate date) throws AlbumNotAvailableException {
+    public Album scheduleAlbum(String name, LocalDate date, double price) throws AlbumNotAvailableException {
         try {
             List<Song> songs = this.launchAlbum(date);
             Album album = new Album(name, date, songs);
+            album.setPrice(price);
             this.albums.add(album);
             return album;
         } catch (AlbumNotAvailableException e) {
@@ -232,7 +256,6 @@ public class Band {
             throw e;
         }
     }
-
 
     public List<Song> launchAlbum(LocalDate date) throws AlbumNotAvailableException {
         List<Song> songs = new ArrayList<>();
@@ -254,7 +277,6 @@ public class Band {
             songs.add(song);
         } while (true);
     }
-
 
     @Override
     public String toString() {
